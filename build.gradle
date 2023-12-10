@@ -20,7 +20,9 @@ configurations {
 repositories {
     mavenCentral()
 }
-
+springBoot {
+    mainClass = 'by.tms.blogapic22onl.BlogApiC22OnlApplication'
+}
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
