@@ -2,6 +2,7 @@ package by.tms.blogapic22onl.repository;
 
 
 import by.tms.blogapic22onl.entity.Post;
+import by.tms.blogapic22onl.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,14 +14,9 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-//    Post save(Post post);
-//
-//    Optional<Post> findById(Long id);
+    Page<Post> findAllWithPageable(User user, Pageable pageable);
 
-    Page<Post> findAll(Pageable pageable);
-//
-//    List<Post> findAll();
-//
-//    void removeById(Long id);
+    void deleteById(Long id);
 
+    Optional<Post> findByUserId(Long id);
 }
