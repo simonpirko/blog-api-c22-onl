@@ -4,6 +4,8 @@ import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.PostRepository;
 import by.tms.blogapic22onl.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 

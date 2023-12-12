@@ -9,7 +9,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class Comment extends AbstractEntity{
 }

@@ -36,22 +36,24 @@ public class Post extends AbstractEntity {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "like_id", referencedColumnName = "id")
     private List<Like> likesList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "comment_id", referencedColumnName = "id")
     private List<Comment> commentsList;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany
     @JoinColumn(name = "tag_id", referencedColumnName = "id")
     private List<Tag> tagsList;
 
-    @ManyToMany(mappedBy = "post")
+//    @ManyToMany(mappedBy = "post")
+    @ManyToMany
     private Set<User> postViewers;
 
-    @ManyToMany(mappedBy = "post")
+//    @ManyToMany(mappedBy = "post")
+    @ManyToMany
     private Set<User> postReposters;
 
 }
