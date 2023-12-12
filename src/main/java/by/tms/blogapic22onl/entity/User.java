@@ -1,12 +1,14 @@
 package by.tms.blogapic22onl.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.eclipse.angus.mail.imap.protocol.ID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import by.tms.blogapic22onl.entity.post.Post;
+
+import java.util.Set;
 
 import javax.management.relation.Role;
 import java.util.*;
@@ -16,11 +18,8 @@ import java.util.*;
 @Setter
 @Getter
 @Table(name = "tb_user")
-public class User implements UserDetails {
+public class User extends AbstractEntity implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
-    private ID id;
     private String name;
     private String surname;
     private String username;
@@ -58,4 +57,16 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+  
+  @ManyToMany
+    @JoinTable(name = "post_views",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<Post> viewedPosts;
+
+    @ManyToMany
+            @JoinTable(name = "post_reposts",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    Set<Post> repostedPosts;
 }

@@ -11,56 +11,58 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService implements UserDetailsService, Service<User, Long> {
 
     private  final UserRepository userRepository;
 
-    private final BCryptPasswordEncoder passwordEncoder ;
+    private final BCryptPasswordEncoder passwordEncoder;
+    
     public User save(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(Role.USER);
         return userRepository.save(user);
     }
-    @Transactional
-    public Optional<User>findById(ID id){
+    
+    public Optional<User>findById(Long id){
         return userRepository.findById(id);
     }
-    @Transactional
+    
     public List<User> findAll(){
         return userRepository.findAll();
     }
+    
      public void remove(User user){
         userRepository.delete(user);
     }
-    public void removeById(ID id){
+    
+    public void removeById(Long id){
         if(id != null){
             userRepository.deleteById(id);
         }
     }
+    
     public void update(User user) {
         if (user!= null){
-            user.setName(" new name");
+            user.setName("new name");
             userRepository.save(user);
         }
-
     }
+    
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException{
         return userRepository.findByUsername(username).orElseThrow();
     }
 
-    public void assignRoleToUser(User user,Role role){
+    public void assignRoleToUser(User user, Role role){
         user.getRoles().add(role);
     }
 }
-
-
-
