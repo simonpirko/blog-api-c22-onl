@@ -3,33 +3,52 @@ package by.tms.blogapic22onl.service;
 import by.tms.blogapic22onl.entity.Comment;
 import by.tms.blogapic22onl.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
-@Service
+@Component
+@Transactional
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentService implements Service<Comment, Long> {
+
     private final CommentRepository commentRepository;
-    private final UserRepository userRepository;
-    private final PostRepository postRepository;
 
-    public Comment addComment(Long postId, Long userId, Comment comment) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        Optional<User> optionalUser = userRepository.findById(userId);
+    @Override
+    public Comment save(Comment comment) {
+        comment.setCreatedDate(LocalDateTime.now());
+        return commentRepository.save(comment);
+    }
 
-        if (optionalPost.isPresent() && optionalUser.isPresent()) {
-            Post post = optionalPost.get();
-            User user = optionalUser.get();
+    @Override
+    public Optional<Comment> findById(Long aLong) {
+        return Optional.ofNullable(commentRepository.findById(aLong).orElseThrow(RuntimeException::new));
+    }
 
-            comment.setPost(post);
-            comment.setUser((org.apache.catalina.User) user);
-            comment.setDate(LocalDateTime.now());
+    @Override
+    public List<Comment> findAll() {
+        return commentRepository.findAll();
+    }
 
-            return commentRepository.save(comment);
-        } else {
-            throw new IllegalArgumentException("Invalid post or user ID");
+    @Override
+    public void remove(Comment comment) {
+        commentRepository.delete(comment);
+    }
+
+    @Override
+    public void removeById(Long id) {
+        Optional<Comment> comment = Optional.ofNullable(commentRepository.findById(id).
+                orElseThrow(RuntimeException::new));
+        if (comment.isPresent()) {
+            commentRepository.deleteById(id);
         }
+    }
+
+    @Override
+    public void update(Comment comment) {
+        commentRepository.save(comment);
     }
 }
