@@ -1,15 +1,13 @@
 package by.tms.blogapic22onl.dto.PostDTO;
 
+import by.tms.blogapic22onl.dto.UserDTO.AuthorDetails;
 import by.tms.blogapic22onl.entity.Comment;
 import by.tms.blogapic22onl.entity.Like;
 import by.tms.blogapic22onl.entity.Tag;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.PostSource;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,46 +22,51 @@ import java.util.Set;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewedPostDTO {
+public class ViewedPostDetails {
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private String title;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private String description;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private Set<PostSource> contentType;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private User user;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private LocalDateTime creationDate;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Like> likesList;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Comment> commentsList;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Tag> tagsList;
 
     @NotBlank
-    @NotNull
-    private Set<User> postViewers;
+    @NotEmpty
+    private Set<AuthorDetails> postViewers;
 
     @NotBlank
-    @NotNull
-    private Set<User> postReposters;
+    @NotEmpty
+    private Set<AuthorDetails> postReposters;
+
+    private int countLikes;
+    private int countComments;
+    private int countViews;
+    private int countReposts;
 
 }

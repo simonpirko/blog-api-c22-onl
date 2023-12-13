@@ -14,8 +14,8 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-//    @Query
-//    Page<Post> findAllWithPageable(User user, Pageable pageable);
+    Page<Post> findAll(User user, Pageable pageable);
+    Page<Post> findAll(Pageable pageable);
 
     void deleteById(Long id);
 

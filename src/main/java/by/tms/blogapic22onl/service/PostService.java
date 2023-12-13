@@ -15,43 +15,37 @@ import java.util.Optional;
 
 @Component
 @Transactional
-public class PostService implements Service<Post, Long> {
+//@RequiredArgsConstructor
+public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-//    @Autowired
     public PostService(PostRepository postRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
     }
 
-    @Override
     public Post save(Post post) {
         post.setCreationDate(LocalDateTime.now());
 
         return postRepository.save(post);
     }
 
-    @Override
     public Optional<Post> findById(Long id) {
         return Optional.ofNullable(postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post with " + id + " isn't found...")));
     }
 
-    @Override
     public List<Post> findAll() {
         return postRepository.findAll();
     }
 
-    @Override
     public void remove(Post post) {
         postRepository.delete(post);
 
     }
 
-
-    @Override
     public void update(Post post) {
 postRepository.save(post);
     }
@@ -67,9 +61,13 @@ postRepository.save(post);
 
     }
 
-//    Page<Post> findAllWithPageable(User user, Pageable pageable){
-//return null;
-//    }
+    Page<Post> findAll(User user, Pageable pageable){
+return null;
+    }
+
+    Page<Post> findAll(Pageable pageable){
+        return null;
+    }
 
     Optional<Post> findByUserId(Long id){
         Optional<User> userById = userRepository.findById(id);
