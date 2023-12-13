@@ -5,10 +5,10 @@ import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "tb_comment")
+@Table(name = "tb_like")
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-public class Comment extends AbstractEntity{
+public class Like extends AbstractEntity{
 }
