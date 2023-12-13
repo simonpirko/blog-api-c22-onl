@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class CommentService {
             User user = optionalUser.get();
 
             comment.setPost(post);
-            comment.setUser(user);
+            comment.setUser((org.apache.catalina.User) user);
             comment.setDate(LocalDateTime.now());
 
             return commentRepository.save(comment);
