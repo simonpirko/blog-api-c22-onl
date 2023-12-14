@@ -16,6 +16,7 @@ import java.util.Set;
 @Table(name = "tb_post")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString

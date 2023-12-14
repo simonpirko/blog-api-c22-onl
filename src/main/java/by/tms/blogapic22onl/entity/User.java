@@ -17,16 +17,32 @@ import java.util.*;
 @ToString
 @Setter
 @Getter
+@Builder
 @Table(name = "tb_user")
+@AllArgsConstructor
+@NoArgsConstructor
 //public class User extends AbstractEntity implements UserDetails {
 public class User extends AbstractEntity{
 
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "surname", nullable = false)
     private String surname;
+
+    @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "photo")
     private String photo;
+
+    @Column(name = "country", nullable = false)
     private String country;
 
     @ElementCollection(fetch = FetchType.EAGER)

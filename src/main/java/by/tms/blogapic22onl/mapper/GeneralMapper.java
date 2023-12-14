@@ -8,10 +8,11 @@ import org.mapstruct.Mapper;
 @Mapper(
         componentModel = "spring"
 )
-public interface MapStructMapper {
+public interface GeneralMapper{
     CreatedPostDetails mapToCreatedPostDetails(Post post);
     ViewedPostDetails mapToViewedPostDetails(Post post);
     Post mapToPost(CreatedPostDetails createdPostDetails);
     Post mapToPost(ViewedPostDetails viewedPostDetails);
 
 }
+

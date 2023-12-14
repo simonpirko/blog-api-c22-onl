@@ -4,6 +4,7 @@ import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.PostRepository;
 import by.tms.blogapic22onl.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -15,16 +16,12 @@ import java.util.Optional;
 
 @Component
 @Transactional
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
 
     public Post save(Post post) {
         post.setCreationDate(LocalDateTime.now());
@@ -32,11 +29,15 @@ public class PostService {
         return postRepository.save(post);
     }
 
+
+    @Transactional(readOnly = true)
     public Optional<Post> findById(Long id) {
         return Optional.ofNullable(postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post with " + id + " isn't found...")));
     }
 
+
+    @Transactional(readOnly = true)
     public List<Post> findAll() {
         return postRepository.findAll();
     }
@@ -46,30 +47,37 @@ public class PostService {
 
     }
 
-    public void update(Post post) {
-postRepository.save(post);
+
+    public Post update(Post post) {
+        return postRepository.save(post);
     }
 
 
-    public void removeById(Long id) {
+    public Post removeById(Long id) {
         Optional<Post> postById = Optional.ofNullable(postRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Post with " + id + " isn't found...")));
 
-        if(postById.isPresent()) {
+        if (postById.isPresent()) {
             postRepository.deleteById(id);
         }
-
+        return postById.get();
     }
 
-    Page<Post> findAll(User user, Pageable pageable){
-return null;
-    }
 
-    Page<Post> findAll(Pageable pageable){
+//    @Transactional(readOnly = true)
+//    Page<Post> findAll(User user, Pageable pageable){
+//return null;
+//    }
+
+
+    @Transactional(readOnly = true)
+    public Page<Post> findAll(Pageable pageable){
         return null;
     }
 
-    Optional<Post> findByUserId(Long id){
+
+    @Transactional(readOnly = true)
+   public Optional<Post> findByUserId(Long id){
         Optional<User> userById = userRepository.findById(id);
 
         if(userById.isPresent()) {

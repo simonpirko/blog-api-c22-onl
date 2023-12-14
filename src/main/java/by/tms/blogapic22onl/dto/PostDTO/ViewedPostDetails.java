@@ -9,16 +9,16 @@ import by.tms.blogapic22onl.entity.post.PostSource;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@Builder
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
@@ -64,9 +64,20 @@ public class ViewedPostDetails {
     @NotEmpty
     private Set<AuthorDetails> postReposters;
 
+    @NotBlank
+    @NotNull
     private int countLikes;
+
+    @NotBlank
+    @NotNull
     private int countComments;
+
+    @NotBlank
+    @NotNull
     private int countViews;
+
+    @NotBlank
+    @NotNull
     private int countReposts;
 
 }

@@ -2,7 +2,9 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
+
 }
+
 
 group = 'by.tms'
 version = '0.0.1-SNAPSHOT'
@@ -15,6 +17,7 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+
 }
 
 repositories {
@@ -24,7 +27,7 @@ repositories {
 
 ext {
     mapstructVersion = "1.5.5.Final"
-    lombokVersion = "1.18.30"
+    lombokVersion = "1.18.28"
     lombokMapstructBindingVersion = "0.2.0"
 }
 
@@ -32,9 +35,20 @@ springBoot {
     mainClass = 'by.tms.blogapic22onl.BlogApiC22OnlApplication'
 }
 dependencies {
-    implementation "org.mapstruct:mapstruct:1.5.5.Final", "org.projectlombok:lombok:1.18.30"
-    testImplementation 'junit:junit:4.13.1'
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final", "org.projectlombok:lombok:1.18.30", "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+//    implementation "org.mapstruct:mapstruct:1.5.5.Final", "org.projectlombok:lombok:1.18.28"
+//    testImplementation 'junit:junit:4.13.1'
+//    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final", "org.projectlombok:lombok:1.18.28", "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+//    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+
+    implementation 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor "org.projectlombok:lombok:1.18.28"
+
+    compileOnly "org.projectlombok:lombok:1.18.28"
+    compileOnly "org.mapstruct:mapstruct:1.5.5.Final"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    annotationProcessor "org.projectlombok:lombok:1.18.28"
+
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
