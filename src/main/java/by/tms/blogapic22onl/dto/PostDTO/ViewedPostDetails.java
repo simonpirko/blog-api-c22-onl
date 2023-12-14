@@ -1,69 +1,83 @@
 package by.tms.blogapic22onl.dto.PostDTO;
 
+import by.tms.blogapic22onl.dto.UserDTO.AuthorDetails;
 import by.tms.blogapic22onl.entity.Comment;
 import by.tms.blogapic22onl.entity.Like;
 import by.tms.blogapic22onl.entity.Tag;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.PostSource;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@Builder
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-public class ViewedPostDTO {
+public class ViewedPostDetails {
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private String title;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private String description;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private Set<PostSource> contentType;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private User user;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private LocalDateTime creationDate;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Like> likesList;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Comment> commentsList;
 
     @NotBlank
-    @NotNull
+    @NotEmpty
     private List<Tag> tagsList;
 
     @NotBlank
-    @NotNull
-    private Set<User> postViewers;
+    @NotEmpty
+    private Set<AuthorDetails> postViewers;
+
+    @NotBlank
+    @NotEmpty
+    private Set<AuthorDetails> postReposters;
 
     @NotBlank
     @NotNull
-    private Set<User> postReposters;
+    private int countLikes;
+
+    @NotBlank
+    @NotNull
+    private int countComments;
+
+    @NotBlank
+    @NotNull
+    private int countViews;
+
+    @NotBlank
+    @NotNull
+    private int countReposts;
 
 }
