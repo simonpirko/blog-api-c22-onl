@@ -1,8 +1,9 @@
 package by.tms.blogapic22onl.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import by.tms.blogapic22onl.entity.post.Post;
+import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_like")
@@ -10,5 +11,16 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Like extends AbstractEntity{
+public class Like extends AbstractEntity {
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private Post post;
+
+    @Column(name = "creation_date", nullable = false)
+    private LocalDateTime localDateTime;
 }
