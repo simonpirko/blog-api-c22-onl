@@ -22,11 +22,11 @@ public class UserService implements UserDetailsService {
 
     private  final UserRepository userRepository;
 
-//    private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     
     public User save(User user){
-//        user.setPassword(passwordEncoder.encode(user.getPassword()));
-//        user.getRoles().add(Role.USER);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(Role.USER);
         return userRepository.save(user);
     }
 
@@ -62,7 +62,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(()->new RuntimeException("User with this username isn't found"));
     }
 
-//    public void assignRoleToUser(User user, Role role){
-//        user.getRoles().add(role);
-//    }
+    public void assignRoleToUser(User user, Role role){
+        user.getRoles().add(role);
+    }
 }
