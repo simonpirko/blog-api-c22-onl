@@ -1,5 +1,6 @@
 package by.tms.blogapic22onl.service;
 
+import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
 import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.PostRepository;
@@ -7,6 +8,7 @@ import by.tms.blogapic22onl.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +40,14 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public List<Post> findAll() {
-        return postRepository.findAll();
+    public Page<Post> findAll(Pageable pageable) {
+        return (Page<Post>) postRepository.findAll();
+    }
+
+
+    @Transactional(readOnly = true)
+    public Slice<ViewedPostDetails> findAllByUser(User user, Pageable pageable){
+        return postRepository.findAllByUser(user, pageable);
     }
 
     public void remove(Post post) {
@@ -63,17 +71,6 @@ public class PostService {
         return postById.get();
     }
 
-
-//    @Transactional(readOnly = true)
-//    Page<Post> findAll(User user, Pageable pageable){
-//return null;
-//    }
-
-
-    @Transactional(readOnly = true)
-    public Page<Post> findAll(Pageable pageable){
-        return null;
-    }
 
 
     @Transactional(readOnly = true)

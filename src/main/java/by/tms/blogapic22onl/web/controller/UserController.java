@@ -2,6 +2,7 @@ package by.tms.blogapic22onl.web.controller;
 
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+//    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
+
+//    public UserController(UserService userService, BCryptPasswordEncoder passwordEncoder) {
+//        this.userService = userService;
+//        this.passwordEncoder = passwordEncoder;
+//    }
 
     @GetMapping("/registration")
     public String registration() {
@@ -35,8 +39,6 @@ public class UserController {
             userService.save(user);
             return "redirect:/";
     }
-
-    private final BCryptPasswordEncoder passwordEncoder;
 
     public ResponseEntity<Void> create() {
         log.info("Test");

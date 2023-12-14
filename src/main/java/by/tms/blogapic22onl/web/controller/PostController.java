@@ -1,13 +1,19 @@
-package by.tms.blogapic22onl.controller;
+package by.tms.blogapic22onl.web.controller;
 
 import by.tms.blogapic22onl.dto.PostDTO.CreatedPostDetails;
 import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
+import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.Post;
+import by.tms.blogapic22onl.entity.post.PostSort;
 import by.tms.blogapic22onl.exception.UserNotFoundException;
 import by.tms.blogapic22onl.mapper.GeneralMapper;
 import by.tms.blogapic22onl.service.PostService;
 import by.tms.blogapic22onl.service.UserService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -33,7 +39,7 @@ public class PostController {
 
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@Validated @RequestBody CreatedPostDetails createdPostDetails,
-                                           @RequestParam(name = "userId")Long userId,
+                                           @RequestParam(name = "userId") Long userId,
                                            BindingResult bindingResult) throws UserNotFoundException {
         if (bindingResult.hasErrors()) {
             throw new UserNotFoundException("User isn't found...");
@@ -48,16 +54,16 @@ public class PostController {
 
 
     @DeleteMapping("/{id}/delete")
-    public ResponseEntity<Post> deletePost(@PathVariable("id") Long id){
+    public ResponseEntity<Post> deletePost(@PathVariable("id") Long id) {
         Post post = postService.findById(id).orElseThrow();
 
-            return ResponseEntity.ok(postService.removeById(post.getId()));
+        return ResponseEntity.ok(postService.removeById(post.getId()));
 
     }
 
 
     @PostMapping("/{id}/update")
-    public ResponseEntity<Post> updatePost(@PathVariable("id") Long id){
+    public ResponseEntity<Post> updatePost(@PathVariable("id") Long id) {
         Post post = postService.findById(id).orElseThrow();
 
         return ResponseEntity.ok(postService.update(post));
@@ -73,16 +79,18 @@ public class PostController {
     }
 
 
-    @GetMapping("/get_all")
-    public ResponseEntity<List<Post>> getAllPosts(@Validated @RequestBody ViewedPostDetails viewedPostDetails,
-                                                  @RequestParam("userId") Long userId,
-                                                  @RequestParam Optional<Integer> page,
-                                                  @RequestParam Optional<Integer> size,
-                                                  @RequestParam Optional<String> sortedBy){
-        List<Post> posts = (List<Post>) postService.findAll(Pageable.unpaged());
-return ResponseEntity.ok(posts);
+    @GetMapping("/get_all/{page}")
+    public ResponseEntity<Slice<ViewedPostDetails>> getAllPosts(@Validated @RequestBody ViewedPostDetails viewedPostDetails,
+                                                                @RequestParam("userId") Long userId,
+                                                                @RequestParam(value = "page") Optional<Integer> page,
+                                                                @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+                                                                @RequestParam(value = "limit", defaultValue = "10") @Min(5) @Max(30) Integer limit,
+                                                                @RequestParam PostSort sortedBy) {
+
+        User user = userService.findById(userId).orElseThrow();
+        Slice<ViewedPostDetails> posts = postService.findAllByUser(user, PageRequest.of(offset, limit, sortedBy.getSortValue()));
+
+        return ResponseEntity.ok(posts);
     }
-
-
 
 }
