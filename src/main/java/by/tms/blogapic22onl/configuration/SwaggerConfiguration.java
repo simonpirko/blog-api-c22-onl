@@ -1,31 +1,23 @@
 package by.tms.blogapic22onl.configuration;
 
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfiguration {
-
-    private final ApplicationProperties applicationProperties;
-
     @Bean
-    public Docket createDocket() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .useDefaultResponseMessages(false)
-                .protocols(Set.of("https", "http"))
-                .apiInfo(apiInfo())
-                .select()
-                .apis(RequestHandlerSelectors.basePackage(applicationProperties.getBasePackage()))
-                .build();
+    public OpenAPI twitterCloneOpenAPI() {
+        return new OpenAPI()
+                .info(new Info().title("Twitter-clone API documentation")
+                        .description("Blog application")
+                        .version("v0.0.1")
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org")))
+                .externalDocs(new ExternalDocumentation()
+                        .description("Twitter-clone Wiki Documentation")
+                        .url("https://twitter_clone.wiki.github.org/docs"));
     }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title(applicationProperties.getTitle())
-                .description(applicationProperties.getDescription())
-                .termsOfServiceUrl(applicationProperties.getTerms())
-                .version(applicationProperties.getVersion())
-                .build();
-    }
-}
 }
