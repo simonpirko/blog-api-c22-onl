@@ -13,32 +13,27 @@ import java.util.Optional;
 @Component
 @Transactional
 @RequiredArgsConstructor
-public class CommentService implements Service<Comment, Long> {
+public class CommentService{
 
     private final CommentRepository commentRepository;
 
-    @Override
     public Comment save(Comment comment) {
         comment.setCreatedDate(LocalDateTime.now());
         return commentRepository.save(comment);
     }
 
-    @Override
     public Optional<Comment> findById(Long aLong) {
         return Optional.ofNullable(commentRepository.findById(aLong).orElseThrow(RuntimeException::new));
     }
 
-    @Override
     public List<Comment> findAll() {
         return commentRepository.findAll();
     }
 
-    @Override
     public void remove(Comment comment) {
         commentRepository.delete(comment);
     }
 
-    @Override
     public void removeById(Long id) {
         Optional<Comment> comment = Optional.ofNullable(commentRepository.findById(id).
                 orElseThrow(RuntimeException::new));
@@ -47,7 +42,6 @@ public class CommentService implements Service<Comment, Long> {
         }
     }
 
-    @Override
     public void update(Comment comment) {
         commentRepository.save(comment);
     }

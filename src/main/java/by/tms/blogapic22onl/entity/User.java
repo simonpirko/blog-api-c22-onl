@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.angus.mail.imap.protocol.ID;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import by.tms.blogapic22onl.entity.post.Post;
 
 import java.util.Set;
-
-import javax.management.relation.Role;
 import java.util.*;
 
 @Entity
@@ -51,7 +50,12 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) new ArrayList<>(roles);
+        Set<GrantedAuthority> authorities = new HashSet<>(roles.size());
+
+        for (Role role : roles)
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+
+        return authorities;
     }
 
     @Override

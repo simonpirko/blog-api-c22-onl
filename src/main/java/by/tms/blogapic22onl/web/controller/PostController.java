@@ -82,7 +82,7 @@ public class PostController {
     @GetMapping("/get_all/{page}")
     public ResponseEntity<Slice<ViewedPostDetails>> getAllPosts(@Validated @RequestBody ViewedPostDetails viewedPostDetails,
                                                                 @RequestParam("userId") Long userId,
-                                                                @RequestParam(value = "page") Optional<Integer> page,
+                                                                @PathVariable(value = "page") Optional<Integer> page,
                                                                 @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
                                                                 @RequestParam(value = "limit", defaultValue = "10") @Min(5) @Max(30) Integer limit,
                                                                 @RequestParam PostSort sortedBy) {
