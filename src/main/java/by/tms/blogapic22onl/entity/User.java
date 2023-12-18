@@ -82,6 +82,12 @@ public class User extends AbstractEntity implements UserDetails {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private List<Post> postsList;
+
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "post_id", referencedColumnName = "id")
+    private List<Like> likesList;
+
   
   @ManyToMany
     @JoinTable(name = "post_views",

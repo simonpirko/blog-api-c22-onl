@@ -5,7 +5,6 @@ import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.entity.post.PostSort;
-import by.tms.blogapic22onl.exception.UserNotFoundException;
 import by.tms.blogapic22onl.mapper.GeneralMapper;
 import by.tms.blogapic22onl.service.PostService;
 import by.tms.blogapic22onl.service.UserService;
@@ -37,12 +36,13 @@ public class PostController {
     }
 
 
+
     @PostMapping("/create")
     public ResponseEntity<Post> createPost(@Validated @RequestBody CreatedPostDetails createdPostDetails,
                                            @RequestParam(name = "userId") Long userId,
-                                           BindingResult bindingResult) throws UserNotFoundException {
+                                           BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
-            throw new UserNotFoundException("User isn't found...");
+            throw new RuntimeException("User isn't found...");
 
         } else {
             Post post = postService.save(mapper.mapToPost(createdPostDetails));
