@@ -20,7 +20,6 @@ public class Tag extends AbstractEntity{
     private String name;
 
     @ManyToMany
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
     private List<Post> postsList;
 
 }

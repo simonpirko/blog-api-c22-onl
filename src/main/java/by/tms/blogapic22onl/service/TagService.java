@@ -54,4 +54,9 @@ public class TagService {
         return tagRepository.findAllByPost(post);
     }
 
+
+    public Tag update(Tag tag){
+        return tagRepository.save(tag);
+    }
+
 }

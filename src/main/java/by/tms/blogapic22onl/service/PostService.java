@@ -1,9 +1,11 @@
 package by.tms.blogapic22onl.service;
 
 import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
+import by.tms.blogapic22onl.entity.Tag;
 import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.PostRepository;
+import by.tms.blogapic22onl.repository.TagRepository;
 import by.tms.blogapic22onl.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
 
 
     public Post save(Post post) {
@@ -54,6 +57,16 @@ public class PostService {
         postRepository.delete(post);
 
     }
+
+
+//    public void remove(Post post, List<Tag> tags) {
+//
+//        postRepository.delete(post);
+//        if (tags.size() != 0){
+//            tags.clear();
+//        }
+//
+//    }
 
 
     public Post update(Post post) {
