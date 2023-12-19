@@ -18,9 +18,7 @@ import java.util.*;
 @Getter
 @Builder
 @Table(name = "tb_user")
-@AllArgsConstructor
-@NoArgsConstructor
-public class User extends AbstractEntity implements UserDetails {
+public class User extends AbstractEntity  {
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -47,37 +45,6 @@ public class User extends AbstractEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Set<Role> roles = new HashSet<>();
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>(roles.size());
-
-        for (Role role : roles)
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
-
-        return authorities;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
