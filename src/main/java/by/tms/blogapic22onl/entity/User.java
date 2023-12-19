@@ -18,7 +18,7 @@ import java.util.*;
 @Setter
 @Getter
 @Table(name = "tb_user")
-public class User extends AbstractEntity implements UserDetails {
+public class User extends AbstractEntity  {
 
     private String name;
     private String surname;
@@ -32,32 +32,7 @@ public class User extends AbstractEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) new ArrayList<>(roles);
-    }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-  
   @ManyToMany
     @JoinTable(name = "post_views",
             joinColumns = @JoinColumn(name = "post_id"),
