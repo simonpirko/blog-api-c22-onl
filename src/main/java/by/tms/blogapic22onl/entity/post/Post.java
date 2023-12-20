@@ -49,7 +49,7 @@ public class Post extends AbstractEntity {
     @JoinColumn(name = "comment_id", referencedColumnName = "id")
     private List<Comment> commentsList;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "postsList")
     @Size(max = 15)
     private List<Tag> tagsList;
 

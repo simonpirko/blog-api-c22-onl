@@ -15,14 +15,13 @@ import org.springframework.security.web.SecurityFilterChain;
  */
 
 @Configuration
-//@Profile("prod")
 public class SecurityConfiguration {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/home").permitAll()
+						.requestMatchers("/", "/home", "/registration").permitAll()
 						.anyRequest().authenticated()
 				)
 				.formLogin((form) -> form
