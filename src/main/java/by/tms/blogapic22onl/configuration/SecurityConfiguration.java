@@ -56,4 +56,11 @@ public class SecurityConfiguration {
 
 		return new InMemoryUserDetailsManager(user);
 	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+
+
 }

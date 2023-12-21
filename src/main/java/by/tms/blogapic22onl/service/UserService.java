@@ -5,21 +5,22 @@ import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.angus.mail.imap.protocol.ID;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService, Service<User, Long> {
+public class UserService implements UserDetailsService {
 
     private  final UserRepository userRepository;
 
@@ -30,7 +31,7 @@ public class UserService implements UserDetailsService, Service<User, Long> {
         user.getRoles().add(Role.USER);
         return userRepository.save(user);
     }
-    
+
     public Optional<User>findById(Long id){
         return userRepository.findById(id);
     }
@@ -59,7 +60,8 @@ public class UserService implements UserDetailsService, Service<User, Long> {
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException{
-        return userRepository.findByUsername(username).orElseThrow();
+        return (UserDetails) userRepository.findByUsername(username)
+                .orElseThrow(()->new RuntimeException("User with this username isn't found"));
     }
 
     public void assignRoleToUser(User user, Role role){

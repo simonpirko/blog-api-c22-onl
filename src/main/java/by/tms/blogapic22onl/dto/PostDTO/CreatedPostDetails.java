@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -15,7 +14,7 @@ import java.util.Set;
 @Component
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreatedPostDTO {
+public class CreatedPostDetails {
 
     @NotBlank
     @NotNull

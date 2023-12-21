@@ -1,8 +1,11 @@
 package by.tms.blogapic22onl.entity.post;
 
 import by.tms.blogapic22onl.entity.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -13,6 +16,7 @@ import java.util.Set;
 @Table(name = "tb_post")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -34,6 +38,7 @@ public class Post extends AbstractEntity {
     private Set<PostSource> contentType = new HashSet<>();
 
     @Column(name = "creation_date", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd't'hh:mm:ss'z'")
     private LocalDateTime creationDate;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -44,16 +49,19 @@ public class Post extends AbstractEntity {
     @JoinColumn(name = "comment_id", referencedColumnName = "id")
     private List<Comment> commentsList;
 
-    @OneToMany
-    @JoinColumn(name = "tag_id", referencedColumnName = "id")
+    @ManyToMany
+    @Size(max = 15)
     private List<Tag> tagsList;
 
-//    @ManyToMany(mappedBy = "post")
     @ManyToMany
     private Set<User> postViewers;
 
-//    @ManyToMany(mappedBy = "post")
     @ManyToMany
     private Set<User> postReposters;
+
+    private int countLikes;
+    private int countComments;
+    private int countViews;
+    private int countReposts;
 
 }
