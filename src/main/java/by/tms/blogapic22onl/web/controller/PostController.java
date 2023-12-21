@@ -18,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -107,6 +109,7 @@ public class PostController {
         Slice<Comment> comments = commentService.findAllByPost(posts.get().findAny(), PageRequest.of(offset, limit));
 
         return ResponseEntity.ok(posts);
+//        return new ResponseEntity<>(posts, comments, HttpStatus.OK);
     }
 
 }

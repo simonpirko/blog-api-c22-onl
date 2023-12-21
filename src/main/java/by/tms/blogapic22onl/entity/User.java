@@ -18,6 +18,8 @@ import java.util.*;
 @Getter
 @Builder
 @Table(name = "tb_user")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends AbstractEntity  {
 
     @Column(name = "name", nullable = false)

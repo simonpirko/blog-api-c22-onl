@@ -14,7 +14,6 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Page<Post> findAll(Pageable pageable);
     Slice<ViewedPostDetails> findAllByUser(User user, Pageable pageable);
 
     Optional<Post> findByUserId(Long id);

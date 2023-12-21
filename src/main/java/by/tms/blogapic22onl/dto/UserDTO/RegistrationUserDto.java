@@ -1,4 +1,4 @@
-package by.tms.blogapic22onl.dto;
+package by.tms.blogapic22onl.dto.UserDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

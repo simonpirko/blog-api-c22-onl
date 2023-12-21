@@ -4,6 +4,7 @@ import by.tms.blogapic22onl.entity.Tag;
 import by.tms.blogapic22onl.entity.post.Post;
 import by.tms.blogapic22onl.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,12 +30,10 @@ public class TagService {
 
 
     public Tag removeById(Long id) {
-        Optional<Tag> tagById = Optional.of(tagRepository.findById(id).orElseThrow());
-
-        if (tagById.isPresent()) {
+        Tag tagById = tagRepository.findById(id).orElseThrow();
             tagRepository.deleteById(id);
-        }
-        return tagById.get();
+
+        return tagById;
     }
 
     @Transactional(readOnly = true)
