@@ -1,5 +1,6 @@
 package by.tms.blogapic22onl.service;
 
+import by.tms.blogapic22onl.configuration.UserPrincipal;
 import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.UserRepository;
@@ -58,10 +59,18 @@ public class UserService implements UserDetailsService {
     }
     
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException{
-        return (UserDetails) userRepository.findByUsername(username)
-                .orElseThrow(()->new RuntimeException("User with this username isn't found"));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+
+        User user = userRepository.findByUsername(username).orElseThrow();
+
+       UserPrincipal userPrincipal = UserPrincipal.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .roles(user.getRoles())
+                .build();
+
+        return userPrincipal;
+
     }
 
     public void assignRoleToUser(User user, Role role){

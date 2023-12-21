@@ -12,10 +12,6 @@ import org.hibernate.validator.constraints.Range;
 @ToString
 public class LoginUserDto {
 
-    @NotBlank
-    @NotEmpty
-    private String name;
-
     @NotEmpty
     @NotBlank
     private String username;

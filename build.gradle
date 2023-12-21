@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.2.0'
     id 'io.spring.dependency-management' version '1.1.4'
 //    id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.19"
-    id "org.springdoc.openapi-gradle-plugin" version "1.8.0"
+    id "org.springdoc.openapi-gradle-plugin" version "1.7.0"
 
 
 }
@@ -27,6 +27,9 @@ repositories {
     mavenCentral()
 }
 
+ext['spring-security.version']='5.7.0'
+//ext['spring.version']='6.1.2'
+
 
 dependencies {
     implementation "org.mapstruct:mapstruct:1.5.5.Final", "org.projectlombok:lombok:1.18.28"
@@ -49,6 +52,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-security"
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -58,6 +62,11 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
+    implementation 'javax.servlet:javax.servlet-api:4.0.1' // Use the appropriate version
+
+// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-root
+    implementation('io.jsonwebtoken:jjwt:0.9.1')
+
 
 
 }

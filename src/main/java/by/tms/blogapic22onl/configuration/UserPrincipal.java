@@ -1,13 +1,14 @@
 package by.tms.blogapic22onl.configuration;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import by.tms.blogapic22onl.entity.AbstractEntity;
+import jakarta.persistence.ElementCollection;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
+//import javax.management.relation.Role;
+import by.tms.blogapic22onl.entity.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,7 +18,9 @@ import java.util.Set;
 @Setter
 @Builder
 @ToString
-public class UserPrincipal implements UserDetails {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserPrincipal extends AbstractEntity implements UserDetails {
 
     private String name;
     private String surname;
@@ -30,11 +33,10 @@ public class UserPrincipal implements UserDetails {
     private Set<Role> roles ;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        {
-            return (Collection<? extends GrantedAuthority>) new ArrayList<>(roles);
-        }
 
+            return this.roles;
     }
+
     @Override
     public  String getPassword(){
         return password;
