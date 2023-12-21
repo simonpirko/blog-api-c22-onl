@@ -6,17 +6,14 @@ import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -24,7 +21,6 @@ import java.util.Set;
 public class UserService implements UserDetailsService {
 
     private  final UserRepository userRepository;
-
     private final BCryptPasswordEncoder passwordEncoder;
     
     public User save(User user){

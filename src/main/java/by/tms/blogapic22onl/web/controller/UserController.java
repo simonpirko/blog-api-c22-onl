@@ -1,7 +1,7 @@
 package by.tms.blogapic22onl.web.controller;
 
+import by.tms.blogapic22onl.configuration.JWTTokenProvider;
 import by.tms.blogapic22onl.configuration.UserPrincipal;
-import by.tms.blogapic22onl.configuration.jwt.JwtTokenProvider;
 import by.tms.blogapic22onl.dto.UserDTO.LoginUserDto;
 import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,45 +22,29 @@ import java.util.Set;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final JWTTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
 
-
-    @GetMapping("/registration")
-    public String registration() {
-        return "reg";
-    }
-
     @PostMapping("/registration")
-    public String registration(User user) {
-        userService.save(user);
-        return "redirect:/";
+    public ResponseEntity<User> registration (@RequestBody User user){
+            return ResponseEntity.ok().body(userService.save(user));
     }
-
-
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginUserDto loginUserDto) {
-        UserPrincipal userDetails = (UserPrincipal) userService.loadUserByUsername(loginUserDto.getUsername());
+    public ResponseEntity<String> login(@RequestBody LoginUserDto userDto){
+        UserPrincipal userPrincipal = (UserPrincipal) userService.loadUserByUsername(userDto.getUsername());
 
-        if (passwordEncoder.matches(loginUserDto.getPassword(), userDetails.getPassword())) {
-            Set<Role> authorities = (Set<Role>) userDetails.getAuthorities();
-            String token = jwtTokenProvider.generateToken(userDetails.getId(), userDetails.getUsername(), userDetails.getPassword(), authorities);
-
+        if (passwordEncoder.matches(userDto.getPassword(), userPrincipal.getPassword())) {
+            Set<Role> authorities = (Set<Role>) userPrincipal.getAuthorities();
+            String token = jwtTokenProvider.generateToken(userPrincipal.getUsername(), userPrincipal.getPassword(), authorities);
             return ResponseEntity.ok(token);
         }
-
         return ResponseEntity.badRequest().build();
-    }
-
-
-
-    public ResponseEntity<Void> create() {
-        log.info("Test");
-        return ResponseEntity.ok().build();
     }
 }
