@@ -1,7 +1,6 @@
 package by.tms.blogapic22onl.configuration;
 
 import by.tms.blogapic22onl.entity.Role;
-import by.tms.blogapic22onl.entity.User;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +14,7 @@ import java.util.*;
 
 @Component
 public class JWTTokenProvider {
+
     @Value("${jwt.token.secret}")
     private String jwtSecret;
 
@@ -27,11 +27,10 @@ public class JWTTokenProvider {
         jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
     }
 
-    public String generateToken(Long id, String username, String password, Set<Role> roles) {
+    public String generateToken(String username, String password, Set<Role> roles) {
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("id", id);
-        claims.put("roles", getUserRoleNamesFromJWT(roles));
         claims.put("password", password);
+        claims.put("roles", getUserRoleNamesFromJWT(roles));
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + jwtExpirationInMs);
@@ -45,30 +44,26 @@ public class JWTTokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        User userDetails = new User();
-        userDetails.setId(getUserIdFromJWT(token));
-        userDetails.setUsername(getUserUsernameFromJWT(token));
-        userDetails.setPassword(getUserPasswordFromJWT(token));
-        userDetails.setRoles(getUserRolesFromJWT(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        UserPrincipal userPrincipal = new UserPrincipal();
+
+        userPrincipal.setUsername(getUserUsernameFromJWT(token));
+        userPrincipal.setPassword(getUserPasswordFromJWT(token));
+        userPrincipal.setRoles(getUserRolesFromJWT(token));
+
+        return new UsernamePasswordAuthenticationToken(userPrincipal, "", userPrincipal.getAuthorities());
+    }
+
+    public Set<Role> getUserRolesFromJWT(String token) {
+        List<String> roles = (List<String>) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("roles");
+        return getUserRoleNamesFromJWT(roles);
     }
 
     public String getUserUsernameFromJWT(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public Long getUserIdFromJWT(String token) {
-        Integer i = (Integer) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("id");
-        return Long.valueOf(i);
-    }
-
     public String getUserPasswordFromJWT(String token) {
         return (String) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("password");
-    }
-
-    public Set<Role> getUserRolesFromJWT(String token) {
-        List<String> roles = (List<String>) Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().get("roles");
-        return getUserRoleNamesFromJWT(roles);
     }
 
     public String resolveToken(HttpServletRequest req) {

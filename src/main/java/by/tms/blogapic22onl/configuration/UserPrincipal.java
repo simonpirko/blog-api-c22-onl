@@ -1,22 +1,21 @@
 package by.tms.blogapic22onl.configuration;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import by.tms.blogapic22onl.entity.Role;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.management.relation.Role;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
 @Setter
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
     private String name;
@@ -27,7 +26,7 @@ public class UserPrincipal implements UserDetails {
     private String photo;
     private String country;
 
-    private Set<Role> roles ;
+    private Set<Role> roles;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         {
