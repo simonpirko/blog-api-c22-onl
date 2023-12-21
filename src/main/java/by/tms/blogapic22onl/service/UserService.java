@@ -63,13 +63,13 @@ public class UserService implements UserDetailsService {
 
         User user = userRepository.findByUsername(username).orElseThrow();
 
-        UserPrincipal.builder()
+       UserPrincipal userPrincipal = UserPrincipal.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
                 .roles(user.getRoles())
                 .build();
 
-        return (UserDetails) user;
+        return userPrincipal;
 
     }
 

@@ -1,10 +1,8 @@
 package by.tms.blogapic22onl.configuration;
 
+import by.tms.blogapic22onl.entity.AbstractEntity;
 import jakarta.persistence.ElementCollection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +18,9 @@ import java.util.Set;
 @Setter
 @Builder
 @ToString
-public class UserPrincipal implements UserDetails {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserPrincipal extends AbstractEntity implements UserDetails {
 
     private String name;
     private String surname;
