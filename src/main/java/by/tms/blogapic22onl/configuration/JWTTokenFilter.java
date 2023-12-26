@@ -16,6 +16,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JWTTokenFilter extends OncePerRequestFilter {
 
+    private static final String AUTHORIZATION = "Authorization";
+
     private final JWTTokenProvider jwtTokenProvider;
 
     @Override

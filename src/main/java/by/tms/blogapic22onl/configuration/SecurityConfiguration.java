@@ -30,7 +30,10 @@ public class SecurityConfiguration {
 		http
 				.authorizeHttpRequests((requests) -> requests
 						.requestMatchers("/user/registration", "/user/login").permitAll()
+						.antMatchers("/admin/**").hasRole("ADMIN")
+						.antMatchers("/user/**").hasRole("USER")
 						.anyRequest().authenticated()
+						.and()
 				)
 				.formLogin((form) -> form
 						.loginPage("/login")
