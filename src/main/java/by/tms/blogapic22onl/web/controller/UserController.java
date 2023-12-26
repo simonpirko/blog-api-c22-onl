@@ -8,6 +8,7 @@ import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.service.UserService;
 import by.tms.blogapic22onl.service.emailService.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -34,15 +35,15 @@ public class UserController {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
-//    @PostMapping("/registration")
-//    public ResponseEntity<User> registration (@RequestBody User user){
-//            return ResponseEntity.ok().body(userService.save(user));
-//    }
 
     @PostMapping("/registration")
     public ResponseEntity<User> registration (@RequestBody User user, @RequestBody SimpleEmailDetails simpleEmailDetails){
         userService.save(user);
-        emailService.sendSimpleEmail(simpleEmailDetails);
+        try {
+            emailService.sendSimpleEmail(simpleEmailDetails);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
 
         return ResponseEntity.ok(user);
 

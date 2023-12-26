@@ -2,12 +2,10 @@ package by.tms.blogapic22onl.service.emailService;
 
 import by.tms.blogapic22onl.dto.EmailDTO.EmailWithPostsDetails;
 import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
-import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
-import by.tms.blogapic22onl.entity.Email;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -22,10 +20,15 @@ public class DefaultEmailService implements EmailService {
     public JavaMailSender emailSender;
     private final SpringTemplateEngine templateEngine;
 
+    @Value("${spring.mail.username}")
+    private String sender;
+
+
     @Override
     public void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails){
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setFrom(sender);
         simpleMailMessage.setTo(simpleEmailDetails.getRecipient().getEmail());
         simpleMailMessage.setSubject("Welcome, " + simpleEmailDetails.getRecipient().getName());
 
@@ -47,6 +50,7 @@ public class DefaultEmailService implements EmailService {
                       "\n" +
                       "</body>\n" +
                       "</html>\n";
+
         simpleMailMessage.setText(text);
         emailSender.send(simpleMailMessage);
     }
@@ -56,6 +60,7 @@ public class DefaultEmailService implements EmailService {
 
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        messageHelper.setFrom(sender);
         messageHelper.setTo(emailWithPostsDetails.getRecipient().getEmail());
         messageHelper.setSubject(emailWithPostsDetails.getSubject());
         messageHelper.setText(emailWithPostsDetails.getMessage(), true);

@@ -9,6 +9,6 @@ import org.springframework.http.ResponseEntity;
 import java.io.FileNotFoundException;
 
 public interface EmailService {
-    void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails);
+    void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails) throws MessagingException;
     void sendEmailWithPosts(EmailWithPostsDetails emailWithPostsDetails) throws MessagingException;
 }

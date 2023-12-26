@@ -33,7 +33,7 @@ public class EmailController {
 
     }
 
-    // Sending email with attachment
+    // Sending email with interesting posts
     @PostMapping("/send_mail_with_posts/{user_email}")
     public ResponseEntity sendMailWithPosts(@RequestBody EmailWithPostsDetails emailWithPostsDetails, @PathVariable("user_email") String email){
 
