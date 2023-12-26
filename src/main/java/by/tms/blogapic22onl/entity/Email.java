@@ -8,14 +8,13 @@ import lombok.*;
 import java.util.List;
 import java.util.Map;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
-public class Email extends AbstractEntity{
+public class Email{
 
     private User recipient;
     private String message;

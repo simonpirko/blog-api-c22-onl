@@ -2,10 +2,12 @@ package by.tms.blogapic22onl.web.controller;
 
 import by.tms.blogapic22onl.configuration.JWTTokenProvider;
 import by.tms.blogapic22onl.configuration.UserPrincipal;
+import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
 import by.tms.blogapic22onl.dto.UserDTO.LoginUserDto;
 import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.service.UserService;
+import by.tms.blogapic22onl.service.emailService.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +32,22 @@ public class UserController {
     private final UserService userService;
     private final JWTTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final EmailService emailService;
+
+//    @PostMapping("/registration")
+//    public ResponseEntity<User> registration (@RequestBody User user){
+//            return ResponseEntity.ok().body(userService.save(user));
+//    }
 
     @PostMapping("/registration")
-    public ResponseEntity<User> registration (@RequestBody User user){
-            return ResponseEntity.ok().body(userService.save(user));
+    public ResponseEntity<User> registration (@RequestBody User user, @RequestBody SimpleEmailDetails simpleEmailDetails){
+        userService.save(user);
+        emailService.sendSimpleEmail(simpleEmailDetails);
+
+        return ResponseEntity.ok(user);
+
     }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDto userDto){
         UserPrincipal userPrincipal = (UserPrincipal) userService.loadUserByUsername(userDto.getUsername());

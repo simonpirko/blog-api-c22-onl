@@ -23,7 +23,7 @@ public class DefaultEmailService implements EmailService {
     private final SpringTemplateEngine templateEngine;
 
     @Override
-    public void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails) throws MessagingException{
+    public void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails){
 
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(simpleEmailDetails.getRecipient().getEmail());
@@ -59,7 +59,6 @@ public class DefaultEmailService implements EmailService {
         messageHelper.setTo(emailWithPostsDetails.getRecipient().getEmail());
         messageHelper.setSubject(emailWithPostsDetails.getSubject());
         messageHelper.setText(emailWithPostsDetails.getMessage(), true);
-//        messageHelper.setText(emailWithPostsDetails.getPosts().toString());
         emailSender.send(mimeMessage);
     }
 }
