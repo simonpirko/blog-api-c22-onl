@@ -27,8 +27,7 @@ repositories {
     mavenCentral()
 }
 
-ext['spring-security.version']='5.7.0'
-//ext['spring.version']='6.1.2'
+ext['spring-security.version']='6.0.8'
 
 
 dependencies {
@@ -37,16 +36,6 @@ dependencies {
     annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final", "org.projectlombok:lombok:1.18.28", "org.projectlombok:lombok-mapstruct-binding:0.2.0"
     testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
 
-//    implementation 'org.projectlombok:lombok:1.18.28'
-//    annotationProcessor "org.projectlombok:lombok:1.18.28"
-//
-//    compileOnly "org.projectlombok:lombok:1.18.28"
-//    compileOnly "org.mapstruct:mapstruct:1.5.5.Final"
-//    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
-//    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
-//    annotationProcessor "org.projectlombok:lombok:1.18.28"
-
-
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
@@ -54,6 +43,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.2.1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
@@ -65,7 +55,6 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
     implementation 'javax.servlet:javax.servlet-api:4.0.1' // Use the appropriate version
 
-// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-root
     implementation('io.jsonwebtoken:jjwt:0.9.1')
 
 
