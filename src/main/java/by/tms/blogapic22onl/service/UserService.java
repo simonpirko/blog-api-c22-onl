@@ -6,6 +6,7 @@ import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -71,5 +72,11 @@ public class UserService implements UserDetailsService {
 
     public void assignRoleToUser(User user, Role role){
         user.getRoles().add(role);
+    }
+
+
+    @Scheduled(cron = "${interval-in-cron}")
+    public void getUserLastLoginDate(){
+
     }
 }

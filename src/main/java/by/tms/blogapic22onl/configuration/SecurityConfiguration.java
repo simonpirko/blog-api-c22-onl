@@ -10,7 +10,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 /**
  * @author Simon Pirko on 7.12.23
@@ -21,12 +24,17 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration {
 
 	private final JWTTokenFilter tokenFilter;
+	private static final String H2_URL_PATTERN = "/h2/*";
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain getSecurityFilterChain(HttpSecurity http,
+													  HandlerMappingIntrospector introspector) throws Exception {
+		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
+		RequestMatcher myMatcher = new AntPathRequestMatcher(H2_URL_PATTERN);
 		http
 				.authorizeHttpRequests((requests) -> requests
-								.requestMatchers("/user/registration", "/user/login").permitAll()
+						.requestMatchers(mvcMatcherBuilder.pattern( "/user/registration"),mvcMatcherBuilder.pattern("/user/login")).permitAll()
+						.requestMatchers(myMatcher).authenticated()
 						.anyRequest().authenticated()
 				)
 				.formLogin((form) -> form
@@ -36,6 +44,8 @@ public class SecurityConfiguration {
 				.logout((logout) -> logout.permitAll())
 				.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		http.csrf(csrfConfigurer ->
+				csrfConfigurer.ignoringRequestMatchers(myMatcher));
 
 		return http.build();
 	}
