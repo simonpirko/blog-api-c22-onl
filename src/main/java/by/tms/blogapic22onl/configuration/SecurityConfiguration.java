@@ -33,9 +33,11 @@ public class SecurityConfiguration {
 		RequestMatcher myMatcher = new AntPathRequestMatcher(H2_URL_PATTERN);
 		http
 				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers(mvcMatcherBuilder.pattern( "/user/registration"),mvcMatcherBuilder.pattern("/user/login")).permitAll()
-						.requestMatchers(myMatcher).authenticated()
+						.requestMatchers("/user/registration", "/user/login").permitAll()
+						.antMatchers("/admin/**").hasRole("ADMIN")
+						.antMatchers("/user/**").hasRole("USER")
 						.anyRequest().authenticated()
+						.and()
 				)
 				.formLogin((form) -> form
 						.loginPage("/login")
