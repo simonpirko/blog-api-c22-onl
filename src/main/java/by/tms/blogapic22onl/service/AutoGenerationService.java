@@ -16,7 +16,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class AutoGenerationService {
 
-    private final AutoGenerationRepository autoGeneration;
+
     private final PostRepository postRepository;
 
     public List<Post> getPostByUser(User user) {
