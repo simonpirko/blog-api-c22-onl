@@ -39,34 +39,21 @@ public class AutoGenerationService {
         return tagList.get(randomNumber);
     }
 
-    public Optional<Post> findPost(User user) {
-        return postRepository.findPostByTagName(findRandomTag(user).getName());
-    }
-
-    public Set<Long> autoGenerationPostId(User user) {
+    public List<Post> autoGenerationPosts(Post post, User user) {
         int n = 0;
-
-        Set<Long> postsId = new HashSet<>();
-        while (n < 30) {
-            Post post = findPost(user).orElseThrow();
-            Optional<Post> byUserId = postRepository.findByUserId(user.getId());
-
-            if (Objects.equals(byUserId.get().getId(), post.getId())) {
-                break;
-            }
-            postsId.add(post.getId());
-            n++;
-        }
-
-        return postsId;
-    }
-
-    public List<Post> autoGenerationPosts(User user) {
+        List<Post> postByTag = postRepository.findPostByTagName(findRandomTag(user).getName());
         List<Post> postList = new ArrayList<>();
-        Set<Long> postId = autoGenerationPostId(user);
 
-        for (Long l: postId) {
-            postList.add(postRepository.findById(l).get());
+        Post p = postList.get(new Random().nextInt(postByTag.size()));
+        while (n < 30) {
+
+            if (!p.getId().equals(post.getUser().getId()) || !postList.contains(p)) {
+
+                postList.add(postList.get(new Random().nextInt(postByTag.size())));
+                postByTag = postRepository.findPostByTagName(findRandomTag(user).getName());
+                p = postList.get(new Random().nextInt(postByTag.size()));
+                n++;
+            }
         }
         return postList;
     }

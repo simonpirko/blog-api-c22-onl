@@ -20,7 +20,8 @@ public class AutoGenerationController {
     private final AutoGenerationService generationService;
 
     @GetMapping
-    public ResponseEntity<List<Post>> generation (@RequestBody User user) {
-        return ResponseEntity.ok(generationService.autoGenerationPosts(user));
+    public ResponseEntity<List<Post>> generation (@RequestBody User user,
+                                                  @RequestBody Post post) {
+        return ResponseEntity.ok(generationService.autoGenerationPosts(post, user));
     }
 }
