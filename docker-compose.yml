@@ -1,0 +1,25 @@
+services:
+  app:
+    image: twitter/c22
+    build:
+      context: .
+    container_name: "app"
+    depends_on:
+      - db
+    environment:
+      -SPRING_DATASOURSE_URL=jdbc:postgresql://db:5432/twitter
+    ports:
+      - 8080:8080
+
+  db:
+    image: postgres:15
+    container_name: db
+    environment:
+      - POSTGRES_DB=twitter
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+
+
+
+
+
