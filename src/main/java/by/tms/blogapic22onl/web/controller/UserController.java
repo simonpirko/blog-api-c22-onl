@@ -2,18 +2,22 @@ package by.tms.blogapic22onl.web.controller;
 
 import by.tms.blogapic22onl.configuration.JWTTokenProvider;
 import by.tms.blogapic22onl.configuration.UserPrincipal;
+import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
 import by.tms.blogapic22onl.dto.UserDTO.LoginUserDto;
 import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
+import by.tms.blogapic22onl.mapper.GeneralMapper;
 import by.tms.blogapic22onl.service.UserService;
+import by.tms.blogapic22onl.service.emailService.EmailService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -24,24 +28,37 @@ import java.util.Set;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final JWTTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final EmailService emailService;
+    private final GeneralMapper mapper;
+
 
     @PostMapping("/registration")
-    public ResponseEntity<User> registration (@RequestBody User user){
-            return ResponseEntity.ok().body(userService.save(user));
+    public ResponseEntity<User> registration (@RequestBody User user, @RequestBody SimpleEmailDetails simpleEmailDetails){
+        userService.save(user);
+        try {
+            emailService.sendSimpleEmail(simpleEmailDetails);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return ResponseEntity.ok(user);
+
     }
+
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDto userDto){
         UserPrincipal userPrincipal = (UserPrincipal) userService.loadUserByUsername(userDto.getUsername());
 
         if (passwordEncoder.matches(userDto.getPassword(), userPrincipal.getPassword())) {
             Set<Role> authorities = (Set<Role>) userPrincipal.getAuthorities();
+            LocalDateTime time = LocalDateTime.now();
+            mapper.mapToUser(userDto).setLastVisitDate(time);
             String token = jwtTokenProvider.generateToken(userPrincipal.getUsername(), userPrincipal.getPassword(), authorities);
             return ResponseEntity.ok(token);
         }

@@ -1,5 +1,6 @@
 package by.tms.blogapic22onl.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.angus.mail.imap.protocol.ID;
@@ -9,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import by.tms.blogapic22onl.entity.post.Post;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.*;
 
@@ -62,11 +65,16 @@ public class User extends AbstractEntity  {
     @JoinTable(name = "post_views",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<Post> viewedPosts;
+    private Set<Post> viewedPosts;
 
     @ManyToMany
             @JoinTable(name = "post_reposts",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    Set<Post> repostedPosts;
+    private Set<Post> repostedPosts;
+
+
+    @Column(name = "last_visit")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd't'hh:mm:ss'z'")
+    private LocalDateTime lastVisitDate;
 }

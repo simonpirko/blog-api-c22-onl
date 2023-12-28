@@ -32,6 +32,9 @@ public class Post extends AbstractEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "photo", nullable = false)
+    private String photo;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @Column(name = "content_type", nullable = false)
