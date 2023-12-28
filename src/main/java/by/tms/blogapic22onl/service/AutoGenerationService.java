@@ -3,7 +3,6 @@ package by.tms.blogapic22onl.service;
 import by.tms.blogapic22onl.entity.Tag;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.Post;
-import by.tms.blogapic22onl.repository.AutoGenerationRepository;
 import by.tms.blogapic22onl.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
