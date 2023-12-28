@@ -2,6 +2,7 @@ package by.tms.blogapic22onl.service.emailService;
 
 import by.tms.blogapic22onl.dto.EmailDTO.EmailWithPostsDetails;
 import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
+import by.tms.blogapic22onl.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
@@ -22,6 +24,7 @@ public class DefaultEmailService implements EmailService {
 
     @Value("${spring.mail.username}")
     private String sender;
+
 
 
     @Override
@@ -54,6 +57,7 @@ public class DefaultEmailService implements EmailService {
         simpleMailMessage.setText(text);
         emailSender.send(simpleMailMessage);
     }
+
 
     @Override
     public void sendEmailWithPosts(EmailWithPostsDetails emailWithPostsDetails) throws MessagingException {
