@@ -73,7 +73,7 @@ public class PostController {
     }
 
 
-    @PutMapping("/{id}")        //????????????????????????????????
+    @PutMapping("/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable("id") Long id, @RequestBody List<Tag> tags) {
         Post post = postService.findById(id).orElseThrow();
 
