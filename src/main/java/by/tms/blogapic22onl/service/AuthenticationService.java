@@ -1,13 +1,21 @@
 package by.tms.blogapic22onl.service;
 
-import by.tms.blogapic22onl.configuration.jwt.JwtTokenProvider;
-import by.tms.blogapic22onl.entity.Role;
+import by.tms.blogapic22onl.configuration.JWTTokenProvider;
+import by.tms.blogapic22onl.configuration.SecurityConfiguration;
+import by.tms.blogapic22onl.configuration.UserPrincipal;
+import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthRequestDTO;
+import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthResponseDTO;
 import by.tms.blogapic22onl.entity.User;
+import by.tms.blogapic22onl.mapper.GeneralMapper;
+import by.tms.blogapic22onl.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.security.auth.message.AuthException;
 import lombok.*;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -18,72 +26,26 @@ import java.util.Map;
 public class AuthenticationService {
 
     private final UserService userService;
-    private final Map<String, String> updateStorage = new HashMap<>();
-    private final JwtTokenProvider jwtTokenProvider;
-    @Setter
-    @Getter
-    public  class  JwtRequest{
-        private Long id;
-        private  String login;
-        private  String password;
-    }
+    private final GeneralMapper mapper;
+    private final AuthenticationManager authenticationManager;
+    private final JWTTokenProvider jwtTokenProvider;
+//    private final Map<String, String> updateStorage = new HashMap<>();
 
 
-    @Getter
-    @AllArgsConstructor
-    public class  JwtResponse{
-        private final  String type = "Bearer";
-        private String accessToken;
-        private String updateToken;
-
-    }
-
-    public JwtResponse login(@NonNull JwtRequest authRequest)
+    public JWTAuthResponseDTO authenticateAndGetToken(@NonNull JWTAuthRequestDTO jwtAuthRequestDTO)
             throws AuthException {
-        final User user = userService.findById(authRequest.getId())
-                .orElseThrow(() -> new AuthException("User is not found"));
-        if (user.getPassword().equals(authRequest.getPassword())) {
-            final String accessToken = jwtTokenProvider.generateAccessToken(user);
-            final String updateToken = jwtTokenProvider.generateUpdateToken(user);
-            updateStorage.put(user.getPassword(), updateToken);
-            return new JwtResponse(accessToken, updateToken);
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(mapper.mapToUser(jwtAuthRequestDTO).getUsername(),
+                mapper.mapToUser(jwtAuthRequestDTO).getPassword()));
+
+        UserPrincipal user = (UserPrincipal) userService.loadUserByUsername(mapper.mapToUser(jwtAuthRequestDTO).getUsername());
+        String token = jwtTokenProvider.generateToken(user.getUsername(), user.getPassword(), user.getRoles());
+
+        if(authentication.isAuthenticated()){
+            return  JWTAuthResponseDTO.builder().accessToken(token).build();
         } else {
-            throw new AuthException("Wrong password");
+            throw new UsernameNotFoundException("invalid user request..!!");
         }
     }
 
-    public JwtResponse getAccessToken(@NonNull String updateToken) {
-        if (jwtTokenProvider.validateToken(updateToken)) {
-            final Claims claims = jwtTokenProvider.getUpdateClaims(updateToken);
-            final String login = claims.getSubject();
-            final String saveUpdateToken = updateStorage.get(login);
-            if (saveUpdateToken != null && saveUpdateToken.equals(updateToken)) {
-                final User user = userService.findById(id)
-                        .orElseThrow(() -> new AuthException("User is not found"));
-                final String accessToken = jwtTokenProvider.generateAccessToken(user);
-                return new JwtResponse(accessToken, null);
-            }
-        }
-        return new JwtResponse(null, null);
-    }
 
-    public JwtResponse update(@NonNull String updateToken) throws AuthException {
-        if (jwtTokenProvider.validateToken(updateToken)) {
-            final Claims claims = jwtTokenProvider.getUpdateClaims(updateToken);
-            final String login = claims.getSubject();
-            final String saveUpdateToken = updateStorage.get(login);
-            if (saveUpdateToken != null && saveUpdateToken.equals(updateToken)) {
-                final User user = userService.findById(id)
-                        .orElseThrow(() -> new AuthException("User is not found"));
-                final String accessToken = jwtTokenProvider.generateAccessToken(user);
-                final String newUpdateToken = jwtTokenProvider.generateUpdateToken(user);
-                updateStorage.put(user.getPassword(), newUpdateToken);
-                return new JwtResponse(accessToken, newUpdateToken);
-            }
-        }
-        throw new AuthException("Invalid JWT token");
-    }
-    public Authentication getAuthInfo(){
-        return (Authentication) SecurityContextHolder.getContext().getAuthentication();
-    }
 }

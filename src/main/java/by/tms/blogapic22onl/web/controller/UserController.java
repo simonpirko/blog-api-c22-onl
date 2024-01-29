@@ -3,13 +3,17 @@ package by.tms.blogapic22onl.web.controller;
 import by.tms.blogapic22onl.configuration.JWTTokenProvider;
 import by.tms.blogapic22onl.configuration.UserPrincipal;
 import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
+import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthRequestDTO;
+import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthResponseDTO;
 import by.tms.blogapic22onl.dto.UserDTO.LoginUserDto;
 import by.tms.blogapic22onl.entity.Role;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.mapper.GeneralMapper;
+import by.tms.blogapic22onl.service.AuthenticationService;
 import by.tms.blogapic22onl.service.UserService;
 import by.tms.blogapic22onl.service.emailService.EmailService;
 import jakarta.mail.MessagingException;
+import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +31,7 @@ import java.util.Set;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/auth")
 public class UserController {
 
     private final UserService userService;
@@ -35,6 +39,20 @@ public class UserController {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final GeneralMapper mapper;
+    private final AuthenticationService authenticationService;
+
+
+
+    @PostMapping("/generateToken")
+    public ResponseEntity<JWTAuthResponseDTO> authenticateAndGetToken(@io.swagger.v3.oas.annotations.parameters.RequestBody JWTAuthRequestDTO jwtAuthRequestDTO) {
+        JWTAuthResponseDTO token;
+        try {
+            token = authenticationService.authenticateAndGetToken(jwtAuthRequestDTO);
+        } catch (AuthException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok(token);
+    }
 
 
     @PostMapping("/registration")
@@ -51,7 +69,7 @@ public class UserController {
     }
 
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<String> login(@RequestBody LoginUserDto userDto){
         UserPrincipal userPrincipal = (UserPrincipal) userService.loadUserByUsername(userDto.getUsername());
 
