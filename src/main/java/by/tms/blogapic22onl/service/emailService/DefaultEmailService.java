@@ -2,6 +2,9 @@ package by.tms.blogapic22onl.service.emailService;
 
 import by.tms.blogapic22onl.dto.EmailDTO.EmailWithPostsDetails;
 import by.tms.blogapic22onl.dto.EmailDTO.SimpleEmailDetails;
+import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
+import by.tms.blogapic22onl.entity.post.Post;
+import by.tms.blogapic22onl.service.AutoGenerationService;
 import by.tms.blogapic22onl.service.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -14,12 +17,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
 public class DefaultEmailService implements EmailService {
 
     public JavaMailSender emailSender;
+    private final AutoGenerationService autoGenerationService;
     private final SpringTemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
@@ -28,12 +34,14 @@ public class DefaultEmailService implements EmailService {
 
 
     @Override
-    public void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails){
+    public void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails) throws MessagingException{
 
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setFrom(sender);
-        simpleMailMessage.setTo(simpleEmailDetails.getRecipient().getEmail());
-        simpleMailMessage.setSubject("Welcome, " + simpleEmailDetails.getRecipient().getName());
+        MimeMessage simpleMailMessage = emailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(simpleMailMessage, true, "UTF-8");
+
+        messageHelper.setFrom(sender);
+        messageHelper.setTo(simpleEmailDetails.getRecipient().getEmail());
+        messageHelper.setSubject("Welcome, " + simpleEmailDetails.getRecipient().getName());
 
         String text = "<!doctype html>\n" +
                       "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"\n" +
@@ -54,7 +62,7 @@ public class DefaultEmailService implements EmailService {
                       "</body>\n" +
                       "</html>\n";
 
-        simpleMailMessage.setText(text);
+        messageHelper.setText(text, true);
         emailSender.send(simpleMailMessage);
     }
 
@@ -66,8 +74,33 @@ public class DefaultEmailService implements EmailService {
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         messageHelper.setFrom(sender);
         messageHelper.setTo(emailWithPostsDetails.getRecipient().getEmail());
-        messageHelper.setSubject(emailWithPostsDetails.getSubject());
-        messageHelper.setText(emailWithPostsDetails.getMessage(), true);
+        messageHelper.setSubject("Hello, " + emailWithPostsDetails.getRecipient().getName()+ "! We miss you");
+
+        List<ViewedPostDetails> lovelyPosts = autoGenerationService.autoGenerationPosts(emailWithPostsDetails.getRecipient()).stream().limit(5).toList();
+        emailWithPostsDetails.setPosts(lovelyPosts);
+
+        String text = "<!doctype html>\n" +
+                      "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\"\n" +
+                      "      xmlns:th=\"http://www.thymeleaf.org\">\n" +
+                      "<head>\n" +
+                      "    <meta charset=\"UTF-8\">\n" +
+                      "    <meta name=\"viewport\"\n" +
+                      "          content=\"width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0\">\n" +
+                      "    <meta http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\n" +
+                      "    <title>Email</title>\n" +
+                      "</head>\n" +
+                      "<body>\n" +
+                      "<div>Hello, <b>" + emailWithPostsDetails.getRecipient().getName() + "</b></div>\n" +
+                      "\n" +
+                      "<div> Your haven't visited us since" + emailWithPostsDetails.getRecipient().getLastVisitDate() + "</div>\n" +
+                      "<div> Look some interesting posts for you." + "</div>\n" +
+                      "\n" +
+                      "<div> " + emailWithPostsDetails.getPosts() + "/<div>" +
+                      "</body>\n" +
+                      "</html>\n";
+
+        messageHelper.setText(text, true);
+
         emailSender.send(mimeMessage);
     }
 }

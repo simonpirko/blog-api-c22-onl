@@ -20,6 +20,11 @@ public class Tag extends AbstractEntity{
     private String name;
 
     @ManyToMany
+    @JoinTable(
+            name = "tb_post",
+            joinColumns = {@JoinColumn(name = "tag_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+    )
     private List<Post> postsList;
 
 }

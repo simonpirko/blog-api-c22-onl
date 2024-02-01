@@ -22,10 +22,6 @@ public class EmailWithPostsDetails {
     @NotNull
     private User recipient;
 
-//    @NotBlank
-//    @NotNull
-//   private String toAddress;
-
     @NotBlank
     @NotNull
     private String subject;

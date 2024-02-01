@@ -18,10 +18,6 @@ public class SimpleEmailDetails {
     @NotNull
     private User recipient;
 
-//    @NotBlank
-//    @NotNull
-//    private String toAddress;
-
     @NotBlank
     @NotNull
     private String subject;

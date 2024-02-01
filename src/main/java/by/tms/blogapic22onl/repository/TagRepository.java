@@ -11,7 +11,8 @@ import java.util.Optional;
 public interface TagRepository extends JpaRepository<Tag, Long> {
     Optional<Tag>findByName(String name);
 
-    @Query("SELECT t FROM Tag t JOIN Post p WHERE p.id = :post_id")
+//    @Query("SELECT t FROM Tag t JOIN Post p WHERE p.id = :post_id")
+    @Query("SELECT t FROM Tag t WHERE Post.id = : id")
     List<Tag>findAllByPost(Post post);
 
 }

@@ -20,8 +20,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Optional<Post> findByUserId(Long id);
 
-    @Query("FROM Post p WHERE p.tagsList = : tagName")
-    List<Post> findPostByTagName(String tagName);
+//    @Query("SELECT p FROM Post p WHERE p.tagsList = : tagName")
+@Query("SELECT p FROM Post p WHERE p.tagsList = : name")
+List<Post> findPostByTagName(String name);
 
 
     @Query("SELECT p FROM Post p WHERE p IN (SELECT l.post FROM Like l WHERE l.user = :user)")
