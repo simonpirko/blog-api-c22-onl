@@ -13,6 +13,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,8 +78,12 @@ public class UserService implements UserDetailsService {
     }
 
 
-    @Scheduled(cron = "${interval-in-cron}")
-    public void getUserLastLoginDate(){
+    public boolean getUserDelay(User user){
+        long diff = ChronoUnit.DAYS.between(LocalDateTime.now(), user.getLastVisitDate());
 
+        if(diff > 7) {
+            return true;
+        }
+        return false;
     }
 }

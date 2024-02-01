@@ -68,7 +68,8 @@ public class DefaultEmailService implements EmailService {
 
 
     @Override
-    public void sendEmailWithPosts(EmailWithPostsDetails emailWithPostsDetails) throws MessagingException {
+    public void sendEmailWithPosts() throws MessagingException {
+        EmailWithPostsDetails emailWithPostsDetails = new EmailWithPostsDetails();
 
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");

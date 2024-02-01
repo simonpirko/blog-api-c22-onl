@@ -10,5 +10,5 @@ import java.io.FileNotFoundException;
 
 public interface EmailService {
     void sendSimpleEmail(SimpleEmailDetails simpleEmailDetails) throws MessagingException;
-    void sendEmailWithPosts(EmailWithPostsDetails emailWithPostsDetails) throws MessagingException;
+    void sendEmailWithPosts() throws MessagingException;
 }

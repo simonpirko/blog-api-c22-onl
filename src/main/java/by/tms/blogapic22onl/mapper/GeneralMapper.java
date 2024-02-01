@@ -1,10 +1,12 @@
 package by.tms.blogapic22onl.mapper;
 
+import by.tms.blogapic22onl.dto.EmailDTO.EmailWithPostsDetails;
 import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthRequestDTO;
 import by.tms.blogapic22onl.dto.JwtAuthDTO.JWTAuthResponseDTO;
 import by.tms.blogapic22onl.dto.PostDTO.CreatedPostDetails;
 import by.tms.blogapic22onl.dto.PostDTO.ViewedPostDetails;
 import by.tms.blogapic22onl.dto.UserDTO.LoginUserDto;
+import by.tms.blogapic22onl.entity.Email;
 import by.tms.blogapic22onl.entity.User;
 import by.tms.blogapic22onl.entity.post.Post;
 import org.mapstruct.Mapper;
@@ -25,6 +27,10 @@ public interface GeneralMapper{
 
     User mapToUser(JWTAuthRequestDTO JWTAuthRequestDTO);
     JWTAuthResponseDTO mapToJWTAuthResponseDTO(User user);
+
+
+    EmailWithPostsDetails mapToEmail(Email email);
+    Email mapToEmailWithPostsDetails(EmailWithPostsDetails emailWithPostsDetails);
 
 }
 
